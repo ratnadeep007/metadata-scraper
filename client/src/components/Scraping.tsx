@@ -25,7 +25,13 @@ class Scraping extends React.Component {
       return;
     }
     this.setState({ isLoading: true, error: false });
-    console.log(this.state.url);
+    const localStorageScrapeData = this.getItemFromLocalStorage(this.state.url);
+    if (localStorageScrapeData['url'] || localStorageScrapeData['canonicalUrl']) {
+      this.setState({
+        resultData: [localStorageScrapeData]
+      });
+      return;
+    }
     axiosInstance
       .post(`scrape?url=${this.state.url}`)
       .then(res => {
@@ -34,6 +40,7 @@ class Scraping extends React.Component {
           isLoading: false,
           resultData: res.data
         });
+        this.setItemInLocalStorage(this.state.url, res.data);
         console.log(this.state);
       })
       .catch(err => {
@@ -44,6 +51,14 @@ class Scraping extends React.Component {
           errorText: 'Some error occured will fix it soon'
         })
       });
+  }
+
+  setItemInLocalStorage = (url: string, data: {}) => {
+    localStorage.setItem(url + '-emcode-metascraper', JSON.stringify(data));
+  }
+
+  getItemFromLocalStorage = (url: string) => {
+    return JSON.parse(localStorage.getItem(url + '-emcode-metascraper') || `{}`)
   }
 
   checkValidUrlOrNot(urlString: string) {
