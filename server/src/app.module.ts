@@ -8,7 +8,7 @@ import { ScrapeSchema } from './schemas/scrape.schema';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/emcode_scraper'),
+    MongooseModule.forRoot(process.env.MONGOURL),
     MongooseModule.forFeature([
       {
         name: 'scrape',

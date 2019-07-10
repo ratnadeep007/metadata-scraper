@@ -26,12 +26,17 @@ class Scraping extends React.Component {
     }
     this.setState({ isLoading: true, error: false });
     const localStorageScrapeData = this.getItemFromLocalStorage(this.state.url);
+    
+    /**
+     * Getting data from localstorage if present no need to call api 
+     */
     if (localStorageScrapeData['url'] || localStorageScrapeData['canonicalUrl']) {
       this.setState({
         resultData: [localStorageScrapeData]
       });
       return;
     }
+
     axiosInstance
       .post(`scrape?url=${this.state.url}`)
       .then(res => {
@@ -53,23 +58,18 @@ class Scraping extends React.Component {
       });
   }
 
+  /**
+   * Setting data for offline
+   */
   setItemInLocalStorage = (url: string, data: {}) => {
     localStorage.setItem(url + '-emcode-metascraper', JSON.stringify(data));
   }
 
+  /**
+   * Getiing data according to url
+   */
   getItemFromLocalStorage = (url: string) => {
     return JSON.parse(localStorage.getItem(url + '-emcode-metascraper') || `{}`)
-  }
-
-  checkValidUrlOrNot(urlString: string) {
-    // eslint-disable-next-line
-    const expression = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
-    const regex = new RegExp(expression);
-    if (String(urlString).match(regex)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   render() {
