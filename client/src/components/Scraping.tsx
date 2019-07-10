@@ -6,17 +6,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import ErrorIcon from '@material-ui/icons/Error';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import { Typography, Paper, ButtonBase } from '@material-ui/core';
+import MetadataCard from './MetadataCard';
 
 class Scraping extends React.Component {
 
   state = {
     isLoading: false,
     url: '',
-    errorInUrl: false
+    errorInUrl: false,
   }
 
   submit = () => {
@@ -61,6 +58,7 @@ class Scraping extends React.Component {
               disabled={ this.state.isLoading ? true : false }
               color="primary"
               onClick={() => this.submit()}
+              fullWidth
             >
               Post
             </Button>
@@ -91,52 +89,7 @@ class Scraping extends React.Component {
               </Grid>
             : null
           }
-          <Grid 
-            container 
-            justify="center"
-            alignItems="center"
-            style={{ flexGrow: 1 }}>
-            <Paper>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <ButtonBase style={{ width: 128, height: 128, backgroundImage: "url('https://assets.justinmind.com/blog/wp-content/uploads/2018/08/pen-tool-illustration-768x245.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                    {/* <img
-                      style={{
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                        objectFit: 'cover'
-                      }}
-                      alt="complex" 
-                      src="https://assets.justinmind.com/blog/wp-content/uploads/2018/08/pen-tool-illustration-768x245.png" 
-                    /> */}
-                  </ButtonBase>
-                </Grid>
-                <Grid item xs={12} sm container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs>
-                      <Typography gutterBottom variant="subtitle1">
-                        Standard license
-                      </Typography>
-                      <Typography variant="body2" gutterBottom>
-                        Full resolution 1920x1080 • JPEG
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        ID: 1030114
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                        Remove
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle1">$19.00</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
+          <MetadataCard />
         </Grid>
       </div>
     );
