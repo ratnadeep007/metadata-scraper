@@ -44,7 +44,7 @@ const App: React.FC = () => {
       <div className={classes.root}>
         <AppBar position="static">
           <Typography variant="h5" className={classes.title}>
-            Emcode Scraper
+            Emcode Metadata Scraper
           </Typography>
         </AppBar>
         <Container>
