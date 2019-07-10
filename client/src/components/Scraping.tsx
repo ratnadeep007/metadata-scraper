@@ -113,7 +113,7 @@ class Scraping extends React.Component {
           }
           {
             !this.state.isLoading && this.state.resultData.length
-            ? <MetadataCard />
+            ? <MetadataCard metadata={this.state.resultData[0]} />
             : null
           }
         </Grid>
