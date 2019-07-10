@@ -8,6 +8,9 @@ export class ScrapeController {
 
   @Post()
   async getUrl(@Query() query) {
+    /**
+     * Most of the logic for scraping and saving data is done inside service
+     */
     return await this.scrapeService.scrapeUrl(query.url);
   }
 }
