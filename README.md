@@ -1,4 +1,4 @@
-#Emcode Metadata Scrape
+# Metadata Scrape
 
 This project contains 2 folder server and client
 
