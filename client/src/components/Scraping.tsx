@@ -7,26 +7,48 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import ErrorIcon from '@material-ui/icons/Error';
 import MetadataCard from './MetadataCard';
+import axiosInstance from '../config/interceptor';
 
 class Scraping extends React.Component {
 
   state = {
     isLoading: false,
     url: '',
-    errorInUrl: false,
+    error: false,
+    errorText: '',
+    resultData: []
   }
 
   submit = () => {
-    if (!this.state.url || !this.checkValidUrlOrNot(this.state.url)) {
-      this.setState({ errorInUrl: true });
+    if (!this.state.url) {
+      this.setState({ error: true, errorText: 'Please enter a valid url' });
       return;
     }
-    this.setState({ isLoading: true, errorInUrl: false })
+    this.setState({ isLoading: true, error: false });
+    console.log(this.state.url);
+    axiosInstance
+      .post(`scrape?url=${this.state.url}`)
+      .then(res => {
+        console.log('response', res);
+        this.setState({
+          isLoading: false,
+          resultData: res.data
+        });
+        console.log(this.state);
+      })
+      .catch(err => {
+        console.log('error', err);
+        this.setState({
+          isLoading: false,
+          error: true,
+          errorText: 'Some error occured will fix it soon'
+        })
+      });
   }
 
   checkValidUrlOrNot(urlString: string) {
     // eslint-disable-next-line
-    const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    const expression = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
     const regex = new RegExp(expression);
     if (String(urlString).match(regex)) {
       return true;
@@ -48,7 +70,7 @@ class Scraping extends React.Component {
               label="URL"
               variant="outlined"
               fullWidth
-              onChange={(text) => this.setState({ url: text })}
+              onChange={(event) => this.setState({ url: event.target.value })}
             />
           </Grid>
           <Grid item xs={2}>
@@ -65,15 +87,15 @@ class Scraping extends React.Component {
           </Grid>
           <Grid container>
             {
-              this.state.errorInUrl
+              this.state.error
               ? <Chip
                   avatar={
                     <Avatar><ErrorIcon /></Avatar>
                   }
-                  label="Please check URL you entered"
+                  label={this.state.errorText}
                   color="secondary"
                   style={{ marginBottom: 10 }}
-                  onDelete={() => { this.setState({ errorInUrl: false }) }}
+                  onDelete={() => { this.setState({ error: false }) }}
                 />
               : null
             }
@@ -89,7 +111,11 @@ class Scraping extends React.Component {
               </Grid>
             : null
           }
-          <MetadataCard />
+          {
+            !this.state.isLoading && this.state.resultData.length
+            ? <MetadataCard />
+            : null
+          }
         </Grid>
       </div>
     );
