@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 let axiosInstance = axios.create({
-  baseURL: process.env.BACKEND
+  baseURL: 'https://metascrapper-backend.herokuapp.com/'
 });
 
 export default axiosInstance;
